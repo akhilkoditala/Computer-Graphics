@@ -25,7 +25,7 @@ void gl_plot(int x,int y,int xc,int yc){
 void circle(void)
 {
 	int xc,yc,p,r,x,y;
-	printf("Enter the Points : ");
+	printf("Enter the Center of Circle (points) : ");
 	scanf("%d %d",&xc,&yc);
 	printf("Enter the Radius of the circle : ");
 	scanf("%d",&r);
