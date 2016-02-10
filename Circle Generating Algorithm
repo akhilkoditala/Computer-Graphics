@@ -1,0 +1,65 @@
+#include<GL/glut.h>
+#include<GL/gl.h>
+#include<stdio.h>
+
+void init(void)
+{
+	glClearColor(0.0,0.0,0.0,0.0);
+	glMatrixMode(GL_PROJECTION);
+	gluOrtho2D(0.0,200.0,0.0,150.0);
+}
+
+void gl_plot(int x,int y,int xc,int yc){
+	glBegin(GL_POINTS);
+	glVertex2i(xc+x,yc+y);
+	glVertex2i(xc+x,yc-y);
+	glVertex2i(xc-x,yc+y);
+	glVertex2i(xc-x,yc-y);
+	glVertex2i(xc+y,yc+x);
+	glVertex2i(xc+y,yc-x);
+	glVertex2i(xc-y,yc+x);
+	glVertex2i(xc-y,yc-x);
+	glEnd();
+}
+
+void circle(void)
+{
+	int xc,yc,p,r,x,y;
+	printf("Enter the Points : ");
+	scanf("%d %d",&xc,&yc);
+	printf("Enter the Radius of the circle : ");
+	scanf("%d",&r);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0,1.0,1.0);
+	x = 0;
+	y = r;
+	p = (5.0/4.0) - r;
+ 	glBegin(GL_POINTS);
+	while(x<y){
+		if(p<=0){
+			x=x+1;
+			p = p+2*x+1;
+		}
+		else{
+			x=x+1;
+			y=y-1;	
+			p = p-2*y+2*x+1;
+		}
+		gl_plot(x,y,xc,yc);
+	}
+	glEnd();
+	glFlush();
+}
+
+void main(int argc,char** argv)
+{
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+	glutInitWindowPosition(50,100);
+	glutInitWindowSize(400,300);
+	glutCreateWindow("Circle Generating Algorithm");
+	init();
+	glutDisplayFunc(circle);
+	glutMainLoop();
+}
+
