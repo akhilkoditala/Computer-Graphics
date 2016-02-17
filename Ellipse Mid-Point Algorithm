@@ -32,7 +32,7 @@ y = yr;
 //py = 2 * xr * xr * y;
 glBegin(GL_POINTS);
 p = (yr * yr) - (xr * xr * yr) + (0.25 * xr * xr);
-while((yr*yr*x)<(xr*xr*y)){
+while((yr*yr*x)<=(xr*xr*y)){
 x=x+1;
 if(p<0){
 p = p+(2 * yr * yr * x)+(yr*yr);
