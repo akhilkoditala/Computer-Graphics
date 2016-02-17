@@ -1,0 +1,250 @@
+#include <stdio.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <math.h>
+
+void initialize(){
+	printf("Initializing\n");
+	glClearColor(0.0,0.0,0.0,0.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	gluOrtho2D(0.0,300.0,0.0,300.0);
+	glEnd();
+	glFlush();
+}
+
+void lineSeg(){
+	printf("LineSeg drawing\n");
+	glColor3f(0.0,0.0,1.0);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	
+	glBegin(GL_LINES);
+		glVertex2i(0.0,150.0);
+		glVertex2i(300.0,150.0); // first line needs two vertex
+		//glVertex2i(0.0,0.0);
+		//glVertex2i(100.0,100.0); // 2nd line another
+	glEnd();
+	glFlush();
+}
+
+void Poly(){
+	printf("Polynomial Drawing\n");
+	glColor3f(1.0,1.0,1.0);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	glBegin(GL_POLYGON);
+		glVertex3f(0.0,150.0,0.0);
+		glVertex3f(150.0,225.0,0.0);
+		glVertex3f(300.0,150.0,0.0);
+		//glVertex3f(75.0,75.0,0.0);
+	glEnd();
+	glFlush();
+}
+	
+void dda(){
+	printf("DDA drawing\n"); 
+	int X,Y,m,x1=100,x2=100,y1=0,y2=100;
+	//glClear(GL_COLOR_BUFFER_BIT); 
+	glColor3f(1.0,1.0,0.0); 
+	glBegin(GL_POINTS); 
+	while(x1 != x2 && y1 != y2) { 
+		X = x2-x1;
+		Y = y2-y1;
+		m = (int)(round(Y/X));
+		if(m>=1){ 
+			x1=x1+1;
+			y1=y1+m;
+		} 
+		else{
+		   y1 = y1+1;
+		   x1 = x1 + ( int)(1.0/m);
+		}
+		glVertex2i(x1,y1); 
+	}
+	glVertex2i(x2,y2); 
+	glEnd(); 
+	glColor3f(0.0,1.0,1.0); 
+	glBegin(GL_LINES); 
+	glVertex2i(0,0); 
+	glVertex2i(100,100); 
+	glEnd(); 
+	glFlush();			    
+}
+
+void all_plot_cirlce(int x, int y, int xc, int yc){
+		glBegin(GL_POINTS);
+			glVertex2i(x+xc,y+yc);
+			glVertex2i(-x+xc,y+yc);
+			glVertex2i(-x+xc,-y+yc);
+			glVertex2i(x+xc,-y+yc);
+			glVertex2i(y+xc,x+yc);
+			glVertex2i(-y+xc,x+yc);
+			glVertex2i(-y+xc,-x+yc);
+			glVertex2i(y+xc,-x+yc);
+			
+			
+		glEnd();
+		
+	}
+
+void all_plot_ellipse(int x, int y, int xc, int yc){
+		glBegin(GL_POINTS);
+			glVertex2i(x+xc,y+yc);
+			glVertex2i(-x+xc,y+yc);
+			glVertex2i(-x+xc,-y+yc);
+			glVertex2i(x+xc,-y+yc);
+			///for both axis
+			//glVertex2i(y+xc,x+yc);
+			//glVertex2i(-y+xc,x+yc);
+			//glVertex2i(-y+xc,-x+yc);
+			//glVertex2i(y+xc,-x+yc);
+			
+			
+		glEnd();
+		
+	}
+
+void circle(void){
+	printf("Drawing Circle\n");
+	int xc=240,yc=240,p,r=25;
+    //printf("Enter the Points");
+    //scanf("%d %d",&x,&y);
+    //printf("Enter the Radius of the circle");
+    //scanf("%d",&r);
+    //glClear(GL_COLOR_BUFFER_BIT); // no need to clear for scenary
+    glColor3f(1.0,1.0,.0);
+    p = 1-r;
+    //y=y+r;
+    int x=0,y=r;
+    glBegin(GL_POINTS);
+    glVertex2i(xc,yc);
+    while(x<=y){
+        if(p<=0){
+            x=x+1;
+            p = p+2*x+1;
+        }
+        else{
+            x=x+1;
+            y=y-1; 
+            p=p-2*y+2*x+1;
+        }
+        //glVertex2i(x+xc,y+yc);
+        all_plot_cirlce(x,y,xc,yc);
+    }
+    glEnd();
+    glFlush();
+}
+
+void Bresenhams(void){
+	printf("Drawing Breshenhams\n");
+    int x0=10,y0=10,xf=200,yf=200,i=0,p,dx,dy;
+    //printf("Enter the Starting Points");
+    //scanf("%d %d",&x0,&y0);
+    //printf("Enter the End Points");
+    //scanf("%d %d",&xf,&yf);
+    dx=xf-x0;
+    dy=yf-x0;
+    //glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0,1.0,1.0);
+    p = 2*dy-dx;
+    glVertex2i(x0,y0);
+    glBegin(GL_LINES);
+    while(i<(dx-1)){
+        if(p<0){
+            x0=x0+1;
+            p = p+2*dy;
+        }
+        else{
+            x0=x0+1;
+            y0=y0+1;   
+            p=p+2*dy-2*dx;
+        }
+        glVertex2i(x0,y0);
+        i=i+1;
+    }
+    glEnd();
+    glFlush();
+}
+
+ 
+void ellipse(){
+	glColor3f(0.0,1.0,.0);
+	printf("Drawing ellipse\n");
+	float xc=200,yc=200,rx=75,ry=45;
+    float rxSq = rx * rx;
+    float rySq = ry * ry;
+    float x = 0, y = ry, p;
+    float px = 0, py = 2 * rxSq * y;
+	all_plot_ellipse(x,y,xc,yc);
+	
+    p = rySq - (rxSq * ry) + (0.25 * rxSq);
+    while (px < py)
+    {
+        x++;
+        px = px + 2 * rySq;
+        if (p < 0)
+            p = p + rySq + px;
+        else
+        {
+            y--;
+            py = py - 2 * rxSq;
+            p = p + rySq + px - py;
+        }
+        all_plot_ellipse(x,y,xc,yc);
+    }
+ 
+    p = rySq*(x+0.5)*(x+0.5) + rxSq*(y-1)*(y-1) - rxSq*rySq;
+    while (y > 0)
+    {
+        y--;
+        py = py - 2 * rxSq;
+        if (p > 0)
+            p = p + rxSq - py;
+        else
+        {
+            x++;
+            px = px + 2 * rySq;
+            p = p + rxSq - py + px;
+        }
+        all_plot_ellipse(x,y,xc,yc);
+   
+    }
+    glFlush();
+}
+
+
+void scenary(){
+	printf("Scenary\n");
+	//ellipse();
+	Poly();
+	//lineSeg();
+	//Bresenhams();
+	//dda();
+	//circle();
+	//ellipse();
+	
+}
+
+void createWindow(){
+	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+	glutInitWindowPosition(50,50);
+	glutInitWindowSize(600,400);
+	glutCreateWindow("OpenGl Window");	
+}
+
+int main(int argc, char** argv){
+	printf("Creating Window and rendering Stuffs\n");
+	glutInit(&argc, argv);
+	createWindow();
+	initialize();
+	
+	//glutDisplayFunc(Poly);
+	//glutDisplayFunc(lineSeg);
+	//glutDisplayFunc(Bresenhams);
+	//glutDisplayFunc(dda);
+	//glutDisplayFunc(circle);
+	glutDisplayFunc(scenary);
+	
+	glutMainLoop();
+	
+	return 0;
+}
