@@ -1,80 +1,71 @@
 #include<GL/glut.h>
 #include<GL/gl.h>
 #include<stdio.h>
-
 void init(void)
 {
-	glClearColor(0.0,0.0,0.0,0.0);
-	glMatrixMode(GL_PROJECTION);
-	gluOrtho2D(0.0,200.0,0.0,150.0);
+glClearColor(0.0,0.0,0.0,0.0);
+glMatrixMode(GL_PROJECTION);
+gluOrtho2D(0.0,200.0,0.0,150.0);
 }
-
 void gl_plot(int x,int y,int xc,int yc){
-	glBegin(GL_POINTS);
-	glVertex2i(xc+x,yc+y);
-	glVertex2i(xc+x,yc-y);
-	glVertex2i(xc-x,yc+y);
-	glVertex2i(xc-x,yc-y);
-	glEnd();
+glBegin(GL_POINTS);
+glVertex2i(xc+x,yc+y);
+glVertex2i(xc+x,yc-y);
+glVertex2i(xc-x,yc+y);
+glVertex2i(xc-x,yc-y);
+glEnd();
 }
-
 void ellipse(void)
 {
-	int xc,yc,p,r,xr,yr,x,y,px,py;
-	printf("Enter the center of Ellipse : ");
-	scanf("%d %d",&xc,&yc);
-	printf("Enter the Radius of X-Coordinate of the Ellipse : ");
-	scanf("%d",&xr);
-	printf("Enter the Radius of Y-Coordinate of the Ellipse : ");
-	scanf("%d",&yr);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3f(1.0,1.0,1.0);
-	x = 0;
-	y = yr;
-	px = 0;
-	py = 2 * xr * xr * y;
- 	glBegin(GL_POINTS);
-	p = (yr * yr) - (xr * xr * yr) + (0.25 * xr * xr);
-	while(px<py){
-		if(p<0){
-			x = x+1;
-			p = p+(yr * yr)+px;
-		}
-		else{
-			x=x+1;
-			y=y-1;
-			py = py - (2*xr*xr);	
-			p = p+(yr*yr)+px-py;
-		}
-		gl_plot(x,y,xc,yc);
-	}
-	p = (yr*yr)*((x + 0.5)*(x + 0.5))+((xr*xr)*(y-1)*(y-1))-(xr*xr*yr*yr);
-	while(y>0){
-		y = y-1;
-		py = py - (2*xr*xr);
-		if(p<0){
-			p = p+(xr * xr)-py;
-		}
-		else{
-			x=x+1;
-			px = px + (2*yr*yr);	
-			p = p+(xr*xr)+px-py;
-		}
-		gl_plot(x,y,xc,yc);
-	}
-	glEnd();
-	glFlush();
+int xc,yc,p,r,xr,yr,x,y,px,py;
+printf("Enter the center of Ellipse : ");
+scanf("%d %d",&xc,&yc);
+printf("Enter the Radius of X-Coordinate of the Ellipse : ");
+scanf("%d",&xr);
+printf("Enter the Radius of Y-Coordinate of the Ellipse : ");
+scanf("%d",&yr);
+glClear(GL_COLOR_BUFFER_BIT);
+glColor3f(1.0,1.0,1.0);
+x = 0;
+y = yr;
+//px = 0;
+//py = 2 * xr * xr * y;
+glBegin(GL_POINTS);
+p = (yr * yr) - (xr * xr * yr) + (0.25 * xr * xr);
+while((yr*yr*x)<(xr*xr*y)){
+x=x+1;
+if(p<0){
+p = p+(2 * yr * yr * x)+(yr*yr);
 }
-
+else{
+y=y-1;
+p = p+(2*yr*yr*x)-(2*yr*yr*y)+(yr*yr);
+}
+gl_plot(x,y,xc,yc);
+}
+p = (yr*yr*(x + 0.5)*(x + 0.5))+(xr*xr*(y-1)*(y-1))-(xr*xr*yr*yr);
+while(y>0){
+y = y-1;
+if(p<0){
+x =x +1;
+p = p+(2*yr * yr*x)-(2*xr*xr*y)+(xr*xr);
+}
+else{
+p = p-(2*xr*xr*y)+(xr*xr);
+}
+gl_plot(x,y,xc,yc);
+}
+glEnd();
+glFlush();
+}
 void main(int argc,char** argv)
 {
-	glutInit(&argc,argv);
-	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
-	glutInitWindowPosition(50,100);
-	glutInitWindowSize(400,300);
-	glutCreateWindow("Circle Generating Algorithm");
-	init();
-	glutDisplayFunc(ellipse);
-	glutMainLoop();
+glutInit(&argc,argv);
+glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+glutInitWindowPosition(50,100);
+glutInitWindowSize(400,300);
+glutCreateWindow("Circle Generating Algorithm");
+init();
+glutDisplayFunc(ellipse);
+glutMainLoop();
 }
-
