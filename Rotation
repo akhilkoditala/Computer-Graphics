@@ -15,7 +15,7 @@ void polygon(void)
 {
 	float x1,x2,x3,y1,y2,y3,th;
 	//scanf("%f%f%f%f%f%f%f",&x1,&x2,&x3,&y1,&y2,&y3,&th);
-	x1=50,x2=50,x3=100,y1=50,y2=100,y3=50,th=90;
+	x1=50,x2=50,x3=80,y1=50,y2=80,y3=50,th=90;
 	float c=cos(th*3.14/180) , s=sin(th*3.14/180);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
@@ -30,12 +30,30 @@ void polygon(void)
 		glVertex2i(0,0);
 	glEnd();
 
+	//Rotation - Blue
 	glColor3f(0.0,0.0,1.0);
 	glBegin(GL_POLYGON);
 		glVertex2i(c*x1-s*y1,s*x1+c*y1);
 		glVertex2i(c*x2-s*y2,s*x2+c*y2);
 		glVertex2i(c*x3-s*y3,s*x3+c*y3);	
 	glEnd();
+
+	//Translation - Green
+	glColor3f(0.0,1.0,0.0);
+	glBegin(GL_POLYGON);
+		glVertex2i(x1-30,y1-30);
+		glVertex2i(x2-30,y2-30);
+		glVertex2i(x3-30,y3-30);
+	glEnd();
+	
+	//Scaling - Red
+	glColor3f(1.0,0.0,0.0);
+	glBegin(GL_POLYGON);
+		glVertex2i(x1*1.5,y1*1.5);
+		glVertex2i(x2*1.5,y2*1.5);
+		glVertex2i(x3*1.5,y3*1.5);
+	glEnd();
+
 	glFlush();
 }
 
