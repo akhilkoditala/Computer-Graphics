@@ -1,0 +1,90 @@
+#include<GL/glut.h>
+#include<GL/gl.h>
+#include<GL/glu.h>
+#include<stdio.h>
+#include <math.h>
+
+void init(void)
+{
+	glClearColor(0.0,0.0,0.0,0.0);
+	glMatrixMode(GL_PROJECTION);
+	gluOrtho2D(-150.0,150.0,-150.0,150.0);
+}
+
+void polygon(void)
+{
+	int i,x,y;
+	float x1,x2,x3,y1,y2,y3,th,sx,sy,dx,dy;
+	/*printf("Enter co-ordinates of first point : ");
+	scanf("%f%f",&x1,&y1);
+	printf("\nEnter co-ordinates of second point : ");
+	scanf("%f%f",&x2,&y2);
+	printf("\nEnter co-ordinates of first point : ");
+	scanf("%f%f",&x3,&y3);
+	printf("\nEnter the angle you want to rotate the triangle with : ");
+	scanf("%f",&th);
+	printf("\nEnter the translation parameters of X and Y axis resp. : ");
+	scanf("%f%f",&dx,&dy);
+	printf("\nEnter the scaling parameter of x and y resp. :");
+	scanf("%f%f",&sx,&sy); */
+	//scanf("%f%f%f%f%f%f%f%f%f",&x1,&x2,&x3,&y1,&y2,&y3,&th,&sx,&sy);
+	x1=50,x2=50,x3=80,y1=50,y2=80,y3=50,th=90,sx=1.5,sy=1.5,dx=-30,dy=-30;
+	float c=cos(th*3.14/180) , s=sin(th*3.14/180);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1.0,0.0,0.0);
+	glBegin(GL_LINES);
+		glVertex2i(-150,0);
+		glVertex2i(150,0);
+		glVertex2i(0,-150);
+		glVertex2i(0,150);
+	glEnd();
+	
+	glColor3f(1.0,1.0,1.0);
+	glBegin(GL_POLYGON);
+		glVertex2i(x1,y1);
+		glVertex2i(x2,y2);
+		glVertex2i(x3,y3);
+	glEnd();
+
+	//glBegin(GL_POINTS);
+	//	glVertex2i(0,0);
+	//glEnd();
+
+	//Rotation - Blue
+	glColor3f(0.0,0.0,1.0);
+	glBegin(GL_POLYGON);
+		glVertex2i(c*x1-s*y1,s*x1+c*y1);
+		glVertex2i(c*x2-s*y2,s*x2+c*y2);
+		glVertex2i(c*x3-s*y3,s*x3+c*y3);	
+	glEnd();
+
+	//Translation - Green
+	glColor3f(0.0,1.0,0.0);
+	glBegin(GL_POLYGON);
+		glVertex2i(x1+dx,y1+dy);
+		glVertex2i(x2+dx,y2+dy);
+		glVertex2i(x3+dx,y3+dy);
+	glEnd();
+	
+	//Scaling - Red
+	glColor3f(1.0,0.0,0.0);
+	glBegin(GL_POLYGON);
+		glVertex2i(x1*sx,y1*sy);
+		glVertex2i(x2*sx,y2*sy);
+		glVertex2i(x3*sx,y3*sy);
+	glEnd();
+
+	glFlush();
+}
+
+void main(int argc,char** argv)
+{
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB);
+	glutInitWindowPosition(50,100);
+	glutInitWindowSize(600,600);
+	glutCreateWindow("Triangle Rotation");
+	init();
+	glutDisplayFunc(polygon);
+	glutMainLoop();
+}
